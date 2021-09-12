@@ -4,5 +4,5 @@ Given a simple SVG (one that just contains cubic splines and lines - no transfor
 
 * *disk.ssd* is the disc image
 * *bezier.bas.txt* is the BASIC program
-* *extract.py* for the Python. You'll need 'svgpathtools' as a prerequisite.
+* *extract.py* is the Python. You'll need 'svgpathtools' as a prerequisite.
 * *go* is the shell script that puts it all together. You'll need beebasm to execute this.
