@@ -5,13 +5,9 @@ import struct
 inputFile = sys.argv[1]
 outputFile = sys.argv[2]
 
-# Read SVG into a list of path objects and list of dictionaries of attributes
-# from svgpathtools import svg2paths, wsvg
-# paths, attributes = svg2paths('input.svg')
-
-# Update: You can now also extract the svg-attributes by setting
-# return_svg_attributes=True, or with the convenience function svg2paths2
 from svgpathtools import svg2paths2, Path, Line, Arc, CubicBezier, QuadraticBezier, wsvg
+
+# Load input SVG
 paths, attributes, svg_attributes = svg2paths2(inputFile)
 
 # Get bounding box
@@ -34,8 +30,9 @@ scaleX = 1280 / (maxx - minx)
 scaleY = 1024 / (maxy - miny)
 scale = min(scaleX, scaleY)
 
-borderX = 10
-borderY = 10
+# Allow for a 16 unit border
+borderX = 16
+borderY = 16
 borderScale = min((1280-2*borderX)/1280, (1024-2*borderY)/1024)
 scale = scale * borderScale
 
@@ -103,11 +100,3 @@ with open(outputFile, 'bw+') as f:
                 print("arc not implemented")
             else:
                 print(e)
-
-#        print(e.start)
-#        print(e.control1)
-#        print(e.control2)
-#        print(e.end)
-
-#redpath_attribs = attributes[0]
-#print(redpath_attribs['stroke'])
