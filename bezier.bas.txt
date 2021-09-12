@@ -1,0 +1,49 @@
+MODE 0
+steps%=5
+DIM XA%(4),YA%(4),T0(steps%),T1(steps%),T2(steps%),T3(steps%)
+FOR K%=1 TO 2
+CLS:PRINT"Loading data"
+VDU 23,1,0,0;0;0;0;
+OSCLI("LOAD DATA" + CHR$(48+K%) + " 2000")
+CLS
+D%=&2000
+:
+REM Pre-calculate parameters T0 to T3 for each step
+FOR I%=0 TO steps%
+  t=I%/steps%:a=1-t:b=a*a:c=t*t
+  T0(I%)=a*b:T1(I%)=3*b*t:T2(I%)=3*a*c:T3(I%)=c*t
+NEXT
+:
+REM Draw each path
+E%=?D%:D%=D%+1:REM E% is the number of paths
+FOR J%=0 TO E%
+  T%=?D%:D%=D%+1
+  IF (T% = 1) THEN PROCbezier
+  IF (T% = 2) THEN PROCline
+NEXT
+VDU 23,1,1;0;0;0;0;
+IF K%<2 PRINTTAB(0,30);"Press a key";:A$=GET$
+NEXT
+END
+:
+DEFPROCbezierpoint(I%)
+X%=T0(I%)*XA%(0)+T1(I%)*XA%(1)+T2(I%)*XA%(2)+T3(I%)*XA%(3)
+Y%=T0(I%)*YA%(0)+T1(I%)*YA%(1)+T2(I%)*YA%(2)+T3(I%)*YA%(3)
+ENDPROC
+:
+DEFPROCbezier
+  FORI%=0TO3:XA%(I%)=FNreadshort:YA%(I%)=FNreadshort:NEXT
+  PROCbezierpoint(0):MOVE X%,Y%
+  FOR I%=1 TO steps%
+    PROCbezierpoint(I%):DRAW X%,Y%
+  NEXT
+ENDPROC
+:
+DEFPROCline
+  MOVE FNreadshort,FNreadshort:DRAW FNreadshort,FNreadshort
+ENDPROC
+:
+DEFFNreadshort
+R%=!D% AND &FFFF:D%=D%+2
+IF (R%>=&8000)THEN R%=&10000-R%
+=R%
