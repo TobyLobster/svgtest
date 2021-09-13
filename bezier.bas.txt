@@ -15,8 +15,8 @@ FOR I%=0 TO steps%
 NEXT
 :
 REM Draw each path
-E%=?D%:D%=D%+1:REM E% is the number of paths
-FOR J%=0 TO E%
+E%=FNreadshort:REM E% is the number of paths
+FOR J%=0 TO E%-1
   T%=?D%:D%=D%+1
   IF (T% = 1) THEN PROCbezier
   IF (T% = 2) THEN PROCline
